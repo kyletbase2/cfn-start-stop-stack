@@ -38,7 +38,13 @@ module CfnManage
         @cf_client = Aws::CloudFormation::Client.new(retry_limit: 20)
         @credentials = CfnManage::AWSCredentials.get_session_credentials('start_stop_environment')
         unless @credentials.credentials.nil?
-          @cf_client = Aws::CloudFormation::Client.new(credentials: @credentials, retry_limit: 20)
+            @cf_client = Aws::CloudFormation::Client.new(credentials: @credentials, retry_limit: 20)
+            $log.info("DEBUG: cf_start_stop_environment - Credentials not nil, created CF client with creds")
+          else
+            $log.info("DEBUG: cf_start_stop_environment - No creds found, using default creds")  
+            $log.info("DEBUG: cf_start_stop_environment - Using access_key: #{@credentials.credentials.access_key_id}")
+            $log.info("DEBUG: cf_start_stop_environment - Using path: #{@credentials.path}")
+            $log.info("DEBUG: cf_start_stop_environment - Using profile_name: #{@credentials.profile_name}")
         end
       end
 
